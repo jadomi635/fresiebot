@@ -1,20 +1,19 @@
-# Usar una imagen oficial con PHP, Composer y extensiones
 FROM webdevops/php-apache:8.2
 
-# Copiar archivos del proyecto
+# Copiar todo el proyecto
 COPY . /app
 
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias
+# Instalar dependencias PHP
 RUN composer install --no-interaction --optimize-autoloader
 
-# Dar permisos al almacenamiento y cachés
+# Dar permisos a Laravel
 RUN chmod -R 775 storage bootstrap/cache
 
-# Exponer el puerto 8080 (usado por Render)
-EXPOSE 8080
+# Establecer el DocumentRoot en /app/public
+ENV WEB_DOCUMENT_ROOT=/app/public
 
-# Comando para iniciar Laravel
-CMD php artisan serve --host=0.0.0.0 --port=8080
+# Exponer puerto 8080
+EXPOSE 8080
